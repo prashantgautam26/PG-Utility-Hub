@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Month Pension Verification Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        input[type="date"], input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #229954;
+        }
+        #results {
+            margin-top: 30px;
+            background-color: #eafaf1;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #27ae60;
+        }
+        #results h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d4efdf;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item span {
+            font-weight: 500;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #229954;
+        }
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr; /* Stack the form columns */
+            }
+            .container {
+                padding: 15px; /* Reduce padding on smaller screens */
+            }
+            h1 {
+                font-size: 1.7rem; /* Slightly reduce header size */
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body onload="autoFetchCurrentDA()">
+
+<div class="container">
+    <div class="logo-container" style="text-align: center; margin-bottom: 10px;">
+        <div class="logo-initials" style="width: 50px; height: 50px; background-color: #2c3e50; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">
+            <span style="color: #3498db;">P</span><span style="color: #2ecc71;">G</span>
+        </div>
+    </div>
+    <h1>Current Month Pension Verification</h1>
+    <p style="text-align:center; margin-top:-15px; margin-bottom: 25px; font-size: 0.9em; color: #777;">Verify a pensioner's monthly pay-out.</p>
+
+    <form id="pensionForm">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="currentBasicPension">Current Basic Pension (after commutation, if any)</label>
+                <input type="number" id="currentBasicPension" placeholder="e.g., 30448" required>
+            </div>
+            <div class="form-group">
+                <label for="daRate">Current DA Rate (%)</label>
+                <input type="number" id="daRate" required>
+            </div>
+        </div>
+        <button type="button" onclick="verifyPension()">Verify Pension</button>
+    </form>
+    <div id="results" style="display:none;">
+        <h2>Verification Results</h2>
+        <div id="resultDetails"></div>
+    </div>
+</div>
+
+<script>
+    const daRates = [
+        { date: new Date('2025-07-01'), rate: 58 }, { date: new Date('2025-01-01'), rate: 55 },
+        { date: new Date('2024-07-01'), rate: 53 }, { date: new Date('2024-01-01'), rate: 50 },
+        { date: new Date('2023-07-01'), rate: 46 }, { date: new Date('2023-01-01'), rate: 42 },
+        { date: new Date('2022-07-01'), rate: 38 }, { date: new Date('2022-01-01'), rate: 34 },
+        { date: new Date('2021-07-01'), rate: 31 }, { date: new Date('2019-07-01'), rate: 17 },
+        { date: new Date('2019-01-01'), rate: 12 }, { date: new Date('2018-07-01'), rate: 9 },
+        { date: new Date('2018-01-01'), rate: 7 }, { date: new Date('2017-07-01'), rate: 5 },
+        { date: new Date('2017-01-01'), rate: 4 }, { date: new Date('2016-07-01'), rate: 2 },
+        { date: new Date('2016-01-01'), rate: 0 },
+    ];
+
+    function autoFetchCurrentDA() {
+        const today = new Date();
+        let applicableDARate = 0;
+        for (const da of daRates) {
+            if (today >= da.date) {
+                applicableDARate = da.rate;
+                break;
+            }
+        }
+        document.getElementById('daRate').value = applicableDARate;
+    }
+
+    function verifyPension() {
+        const currentBasicPension = parseFloat(document.getElementById('currentBasicPension').value);
+        const daRate = parseFloat(document.getElementById('daRate').value);
+
+        if (isNaN(currentBasicPension) || isNaN(daRate)) {
+            alert('Please fill all fields with valid values.');
+            return;
+        }
+
+        const dearnessAllowance = currentBasicPension * (daRate / 100);
+        const totalCurrentPension = currentBasicPension + dearnessAllowance;
+
+        const resultsDiv = document.getElementById('results');
+        const resultDetails = document.getElementById('resultDetails');
+        const formatInr = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2 }).format(num);
+
+        resultDetails.innerHTML = `
+            <div class="result-item"><span>Current Basic Pension:</span> <span class="value">${formatInr(currentBasicPension)}</span></div>
+            <div class="result-item"><span>Dearness Allowance (DR) @ ${daRate}%:</span> <span class="value">${formatInr(dearnessAllowance)}</span></div>
+            <hr>
+            <div class="result-item"><strong><span>Total Current Pension:</span></strong> <strong class="value">${formatInr(totalCurrentPension)}</strong></div>
+        `;
+        resultsDiv.style.display = 'block';
+    }
+</script>
+
+<p style="text-align:center; font-weight: bold; color: #3498db; margin-top: 30px;">Created by:- Prashant Gautam, Assistant Accounts Officer, O/o Accountant General (A & E) Uttrakhand</p>
+</body>
+</html>

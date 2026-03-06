@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Speed Test</h1>
+        <div id="test-selection">
+            <p>Select a test:</p>
+            <!-- Sample test buttons will be added here by JavaScript -->
+        </div>
+        <div id="text-to-type-container">
+            <p id="text-to-type"></p>
+        </div>
+        <textarea id="user-input" rows="10" placeholder="Start typing here..."></textarea>
+        <div class="stats">
+            <div class="stat">
+                <p>Time</p>
+                <p id="timer">0s</p>
+            </div>
+            <div class="stat">
+                <p>WPM</p>
+                <p id="wpm">0</p>
+            </div>
+            <div class="stat">
+                <p>Accuracy</p>
+                <p id="accuracy">100%</p>
+            </div>
+        </div>
+        <button id="restart-btn">Restart</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

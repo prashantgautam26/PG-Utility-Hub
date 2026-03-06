@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 800px;
+    max-width: 90%;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 1rem;
+}
+
+#test-selection {
+    margin-bottom: 1rem;
+}
+
+#test-selection button {
+    margin: 0.2rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#test-selection button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+#text-to-type-container {
+    background-color: #eee;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    text-align: left;
+    height: 150px;
+    overflow-y: auto;
+}
+
+#text-to-type {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+#text-to-type .correct {
+    color: green;
+}
+
+#text-to-type .incorrect {
+    color: red;
+    text-decoration: underline;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat p:first-child {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0;
+}
+
+.stat p:last-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+button#restart-btn {
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button#restart-btn:hover {
+    background-color: #0056b3;
+}

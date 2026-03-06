@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PG's Utility Tools | प्रशांत गौतम द्वारा विकसित</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --text: #2b2d42;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            font-weight: 400;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            background: var(--white);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+
+        p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .launch-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .tool-card:hover .launch-btn {
+            background: var(--secondary);
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PG's Utility Tools</h1>
+        <p class="subtitle">प्रशांत गौतम द्वारा विकसित उपयोगी कैलकुलेटर और टूल्स</p>
+    </header>
+
+    <div class="tools-grid">
+        <!-- Pension Calculator -->
+        <a href="Others/pension_calculator.html" class="tool-card">
+            <div>
+                <span class="icon">💰</span>
+                <h3>Pension Calculator</h3>
+                <p>Central Government Pension calculation tool for employees. गणना करें अपनी पेंशन और अन्य लाभ।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- Annual Tax Calculator -->
+        <a href="Others/annual_tax_calculator.html" class="tool-card">
+            <div>
+                <span class="icon">📊</span>
+                <h3>Tax Calculator</h3>
+                <p>Calculate your annual salary and income tax obligations accurately. वार्षिक आय और कर की गणना।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- Health & BMI -->
+        <a href="universal_health_bmi/index.html" class="tool-card">
+            <div>
+                <span class="icon">🏥</span>
+                <h3>Know Your Health</h3>
+                <p>Track your BMI and health metrics with this intuitive dashboard. स्वास्थ्य और बीएमआई ट्रैकर।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- UPI QR Generator -->
+        <a href="upi_qr_generator/index.html" class="tool-card">
+            <div>
+                <span class="icon">📱</span>
+                <h3>UPI QR Generator</h3>
+                <p>Create custom UPI QR codes for seamless payments. यूपीआई क्यूआर कोड जनरेटर।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- DA Arrear Calculator -->
+        <a href="Others/da_arrear_calculator.html" class="tool-card">
+            <div>
+                <span class="icon">📈</span>
+                <h3>DA Arrear Calculator</h3>
+                <p>Quickly calculate your Dearness Allowance arrears. डीए एरियर की आसान गणना।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- Typing Test -->
+        <a href="TypingTest/index.html" class="tool-card">
+            <div>
+                <span class="icon">⌨️</span>
+                <h3>Typing Test</h3>
+                <p>Improve your typing speed and accuracy with real-time feedback. टाइपिंग स्पीड टेस्ट।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- Vehicle QR Generator -->
+        <a href="vehicle_qr_generator/index.html" class="tool-card">
+            <div>
+                <span class="icon">🚗</span>
+                <h3>Vehicle QR Generator</h3>
+                <p>Generate QR codes for vehicle identification and information. वाहन क्यूआर कोड जनरेटर।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- MathMagic -->
+        <a href="Others/MathMagic.html" class="tool-card">
+            <div>
+                <span class="icon">✨</span>
+                <h3>MathMagic</h3>
+                <p>Interactive mathematical tools and visualizations. गणित का जादू और टूल्स।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+
+        <!-- Pension Verification -->
+        <a href="Others/pension_verification_calculator.html" class="tool-card">
+            <div>
+                <span class="icon">🔍</span>
+                <h3>Pension Verification</h3>
+                <p>Verify pension calculations and data consistency. पेंशन सत्यापन कैलकुलेटर।</p>
+            </div>
+            <span class="launch-btn">Launch Tool</span>
+        </a>
+    </div>
+
+    <footer>
+        <p>© 2026 प्रशांत गौतम द्वारा विकसित | सर्वाधिकार सुरक्षित</p>
+    </footer>
+
+</body>
+</html>

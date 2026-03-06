@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Central Government Pension Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        input[type="date"], input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
+            margin-top: 30px;
+            background-color: #eaf5ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+        #results h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d4e6f1;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item span {
+            font-weight: 500;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #2980b9;
+        }
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr; /* Stack the form columns */
+            }
+            .container {
+                padding: 15px; /* Reduce padding on smaller screens */
+            }
+            h1 {
+                font-size: 1.7rem; /* Slightly reduce header size */
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-container" style="text-align: center; margin-bottom: 10px;">
+        <div class="logo-initials" style="width: 50px; height: 50px; background-color: #2c3e50; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">
+            <span style="color: #3498db;">P</span><span style="color: #2ecc71;">G</span>
+        </div>
+    </div>
+    <h1>Pension Calculator</h1>
+    <p style="text-align:center; margin-top:-15px; margin-bottom: 25px; font-size: 0.9em; color: #777;">For Government Employees</p>
+
+    <form id="pensionForm">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" required onchange="autoCalculateDOR()">
+            </div>
+            <div class="form-group">
+                <label for="doj">Date of Joining</label>
+                <input type="date" id="doj" required>
+            </div>
+            <div class="form-group">
+                <label for="dor">Date of Retirement</label>
+                <input type="date" id="dor" required onchange="autoCalculateDARate()">
+            </div>
+            <div class="form-group">
+                <label for="basicPay">Last Basic Pay (at retirement)</label>
+                <input type="number" id="basicPay" placeholder="e.g., 85500" required>
+            </div>
+            <div class="form-group">
+                <label for="daRate">DA Rate at Retirement (%)</label>
+                <input type="number" id="daRate" placeholder="e.g., 50" required>
+            </div>
+            <div class="form-group">
+                <label for="commutationPercentage">Commutation Percentage (max 40%)</label>
+                <input type="number" id="commutationPercentage" value="40" min="0" max="40" required>
+            </div>
+        </div>
+        <button type="button" onclick="calculatePension()">Calculate Pension</button>
+    </form>
+    <div id="results" style="display:none;">
+        <h2>Calculation Results</h2>
+        <div id="resultDetails"></div>
+    </div>
+</div>
+
+<script>
+    // Correct commutation table as per CCS (Commutation of Pension) Rules.
+    const commutationTable = {
+        20: 9.187, 21: 9.186, 22: 9.185, 23: 9.184, 24: 9.183, 25: 9.182,
+        26: 9.181, 27: 9.180, 28: 9.178, 29: 9.176, 30: 9.174, 31: 9.171,
+        32: 9.168, 33: 9.164, 34: 9.160, 35: 9.155, 36: 9.149, 37: 9.142,
+        38: 9.134, 39: 9.125, 40: 9.116, 41: 9.106, 42: 9.095, 43: 9.083,
+        44: 9.070, 45: 9.056, 46: 9.041, 47: 9.025, 48: 9.008, 49: 8.990,
+        50: 8.971, 51: 8.951, 52: 8.929, 53: 8.906, 54: 8.881, 55: 8.855,
+        56: 8.827, 57: 8.798, 58: 8.766, 59: 8.732, 60: 8.696, 61: 8.194,
+        62: 8.093, 63: 7.982, 64: 7.862, 65: 7.731, 66: 7.591, 67: 7.431,
+        68: 7.262, 69: 7.083, 70: 6.897, 71: 6.704, 72: 6.502, 73: 6.296,
+        74: 6.085, 75: 5.872, 76: 5.657, 77: 5.443, 78: 5.229, 79: 5.018,
+        80: 4.809, 81: 4.605
+    };
+
+    // Hardcoded DA rates as provided by the user, sorted by date descending.
+    const daRates = [
+        { date: new Date('2025-07-01'), rate: 58 },
+        { date: new Date('2025-01-01'), rate: 55 },
+        { date: new Date('2024-07-01'), rate: 53 },
+        { date: new Date('2024-01-01'), rate: 50 },
+        { date: new Date('2023-07-01'), rate: 46 },
+        { date: new Date('2023-01-01'), rate: 42 },
+        { date: new Date('2022-07-01'), rate: 38 },
+        { date: new Date('2022-01-01'), rate: 34 },
+        { date: new Date('2021-07-01'), rate: 31 },
+        { date: new Date('2019-07-01'), rate: 17 },
+        { date: new Date('2019-01-01'), rate: 12 },
+        { date: new Date('2018-07-01'), rate: 9 },
+        { date: new Date('2018-01-01'), rate: 7 },
+        { date: new Date('2017-07-01'), rate: 5 },
+        { date: new Date('2017-01-01'), rate: 4 },
+        { date: new Date('2016-07-01'), rate: 2 },
+        { date: new Date('2016-01-01'), rate: 0 }, // Assuming 0% from user's "0"
+    ];
+
+    function autoCalculateDOR() {
+        const dobInput = document.getElementById('dob');
+        if (!dobInput.value) return;
+
+        const dob = new Date(dobInput.value);
+        const retirementYear = dob.getFullYear() + 60;
+        const retirementMonth = dob.getMonth(); // 0-indexed
+
+        const lastDay = new Date(retirementYear, retirementMonth + 1, 0).getDate();
+
+        const year = retirementYear;
+        const month = String(retirementMonth + 1).padStart(2, '0');
+        const day = String(lastDay).padStart(2, '0');
+        
+        const dorString = `${year}-${month}-${day}`;
+        document.getElementById('dor').value = dorString;
+        autoCalculateDARate(); // Call DA rate calculation after DOR is set
+    }
+
+    function autoCalculateDARate() {
+        const dorInput = document.getElementById('dor');
+        if (!dorInput.value) return;
+
+        const dor = new Date(dorInput.value);
+        let applicableDARate = 0;
+
+        for (const da of daRates) {
+            if (dor >= da.date) {
+                applicableDARate = da.rate;
+                break;
+            }
+        }
+        document.getElementById('daRate').value = applicableDARate;
+    }
+
+    function calculatePension() {
+        const dob = new Date(document.getElementById('dob').value);
+        const doj = new Date(document.getElementById('doj').value);
+        const dor = new Date(document.getElementById('dor').value);
+        const basicPay = parseFloat(document.getElementById('basicPay').value);
+        const daRate = parseFloat(document.getElementById('daRate').value);
+        const commutationPercentage = parseFloat(document.getElementById('commutationPercentage').value);
+
+        if (isNaN(dob) || isNaN(doj) || isNaN(dor) || isNaN(basicPay) || isNaN(daRate) || isNaN(commutationPercentage)) {
+            alert('Please fill all fields with valid values.');
+            return;
+        }
+
+        // --- Calculations ---
+
+        // 1. Raw Service Calculation
+        let serviceYears = dor.getFullYear() - doj.getFullYear();
+        let serviceMonths = dor.getMonth() - doj.getMonth();
+        let serviceDays = dor.getDate() - doj.getDate();
+        if (serviceDays < 0) {
+            serviceMonths--;
+            const prevMonth = new Date(dor.getFullYear(), dor.getMonth(), 0);
+            serviceDays += prevMonth.getDate();
+        }
+        if (serviceMonths < 0) {
+            serviceYears--;
+            serviceMonths += 12;
+        }
+        const serviceString = `${serviceYears} years, ${serviceMonths} months, ${serviceDays} days`;
+        
+        // 2. Qualifying Service for Gratuity (rounded to nearest half-year)
+        const totalMonthsForGratuity = serviceYears * 12 + serviceMonths;
+        let halfYearsForGratuity = Math.floor(totalMonthsForGratuity / 6);
+        if ((totalMonthsForGratuity % 6) >= 3) {
+            halfYearsForGratuity++;
+        }
+        const qualifyingServiceInHalfYears = Math.min(halfYearsForGratuity, 66);
+
+        // 3. Gratuity Calculation
+        const daAmountForGratuity = basicPay * (daRate / 100);
+        const emolumentsForGratuity = basicPay + daAmountForGratuity;
+        let retirementGratuity = (emolumentsForGratuity / 4) * qualifyingServiceInHalfYears;
+        
+        // Determine the maximum gratuity based on the DA rate
+        let maxGratuity = 2000000; // Default cap
+        if (daRate >= 50) {
+            maxGratuity = 2500000; // Enhanced cap
+        }
+        retirementGratuity = Math.min(retirementGratuity, maxGratuity);
+
+        // 4. Pension Calculation (with corrected Qualifying Service)
+        let monthlyPension;
+        const maxPension = basicPay / 2; // Use unrounded value for precision
+
+        // Calculate Qualifying Service for Pension (rounded to half-years)
+        // Rule: 3 months+ = 1 half-year, 9 months+ = 2 half-years
+        let pensionQualifyingYears = serviceYears;
+        if (serviceMonths >= 9) {
+            pensionQualifyingYears += 1; // Rounded up to next full year
+        } else if (serviceMonths >= 3) {
+            pensionQualifyingYears += 0.5; // Rounded to nearest half-year
+        }
+        
+        if (pensionQualifyingYears >= 20) {
+            monthlyPension = maxPension;
+        } else {
+            monthlyPension = maxPension * (pensionQualifyingYears / 20);
+        }
+
+        // 5. Commutation
+        let age = dor.getFullYear() - dob.getFullYear();
+        const monthDiff = dor.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && dor.getDate() < dob.getDate())) {
+            age--;
+        }
+        const ageOnNextBirthday = age + 1;
+
+        const commutationFactor = commutationTable[ageOnNextBirthday];
+        const commutablePension = monthlyPension * (commutationPercentage / 100);
+        const commutationAmount = commutablePension * 12 * commutationFactor;
+        
+        // 6. Reduced Pension
+        const reducedMonthlyPension = monthlyPension - commutablePension;
+
+        // 7. Restoration Date
+        const restorationDate = new Date(dor);
+        restorationDate.setFullYear(restorationDate.getFullYear() + 15);
+
+        // --- Display Results ---
+        const resultsDiv = document.getElementById('results');
+        const resultDetails = document.getElementById('resultDetails');
+        
+        // Round final values to the nearest rupee
+        const finalGratuity = Math.round(retirementGratuity);
+        const finalMonthlyPension = Math.round(monthlyPension);
+        const finalCommutablePension = Math.round(commutablePension);
+        const finalCommutationAmount = Math.round(commutationAmount);
+        // Use rounded values for consistency
+        const finalReducedMonthlyPension = finalMonthlyPension - finalCommutablePension; 
+
+        const formatInr = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
+
+        resultDetails.innerHTML = `
+            <div class="result-item"><span>Qualifying Service (Actual):</span> <span class="value">${serviceString}</span></div>
+            <div class="result-item"><span>Qualifying Service (for Pension):</span> <span class="value">${pensionQualifyingYears} years</span></div>
+            <div class="result-item"><span>Retirement Gratuity:</span> <span class="value">${formatInr(finalGratuity)}</span></div>
+            <div class="result-item"><span>Monthly Pension (Basic):</span> <span class="value">${formatInr(finalMonthlyPension)}</span></div>
+            <div class="result-item"><span>Portion of Pension Commuted (${commutationPercentage}%):</span> <span class="value">${formatInr(finalCommutablePension)}/month</span></div>
+            <div class="result-item"><span>Lump Sum Commutation Amount:</span> <span class="value">${formatInr(finalCommutationAmount)}</span></div>
+            <div class="result-item"><span>Reduced Monthly Pension (Residuary):</span> <span class="value">${formatInr(finalReducedMonthlyPension)}</span></div>
+            <div class="result-item"><span>Pension will be fully restored on:</span> <span class="value">${restorationDate.toLocaleDateString('en-IN')}</span></div>
+        `;
+        resultsDiv.style.display = 'block';
+    }
+</script>
+
+<p id="creator-info" style="text-align:center; font-weight: bold; color: #3498db; margin-top: 30px;"></p>
+<script>
+    function showCreatorInfo() {
+        // The creator info, encoded in Base64 to hide it from plain sight.
+        const encodedInfo = 'Q3JlYXRlZCBieTotIFByYXNoYW50IEdhdXRhbSwgQXNzaXN0YW50IEFjY291bnRzIE9mZmljZXIsIE8vbyBBY2NvdW50YW50IEdlbmVyYWwgKEEgJiBFKSBVdHRyYWtoYW5k';
+        
+        // A simple "hash" of the password "Wonder". This is not for security, but for obfuscation.
+        const passHash = "11410110011011187"; 
+
+        function checkPass(pass) {
+            let hash = '';
+            // A simple, non-obvious way to check the password.
+            for (let i = pass.length - 1; i >= 0; i--) {
+                hash += pass.charCodeAt(i);
+            }
+            return hash === passHash;
+        }
+
+        const password = prompt("Password:", "");
+        if (checkPass(password)) {
+            // Decode and display the creator info only if the password is correct.
+            document.getElementById("creator-info").innerHTML = atob(encodedInfo);
+        } else {
+            // Optional: show a generic message or leave it blank.
+            document.getElementById("creator-info").innerHTML = "Unauthorized";
+        }
+    }
+    document.addEventListener('DOMContentLoaded', showCreatorInfo);
+</script>
+</body>
+</html>

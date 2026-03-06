@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know Your Health | स्वास्थ्य संचेतना</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            --heart-red: #ef4444;
+            --heart-blue: #3b82f6;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            color: var(--text-dark);
+        }
+
+        /* Animated Background Pulse */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            z-index: -1;
+            animation: pulse-line 4s infinite linear;
+        }
+
+        @keyframes pulse-line {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Language Toggle */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 4px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            z-index: 100;
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Header & Logo */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+        }
+
+        .heart-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.3));
+        }
+
+        .ecg-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            margin-top: -20px;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: ecg-draw 3s infinite linear;
+        }
+
+        @keyframes ecg-draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+        }
+
+        .sub-tag {
+            color: #94a3b8;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        /* Main Glass Card */
+        .main-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 520px;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-gradient);
+        }
+
+        /* Unit Selector */
+        .unit-nav {
+            display: flex;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .unit-tab {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #64748b;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .unit-tab.active {
+            background: white;
+            color: var(--heart-blue);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Form Inputs */
+        .input-box {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--heart-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Action Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .btn-calc {
+            flex: 2;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-reset {
+            flex: 1;
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 18px;
+            border-radius: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Results Display */
+        #result-area {
+            display: none;
+            margin-top: 40px;
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .bmi-card {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        .bmi-circle {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 8px solid #f1f5f9;
+            transition: 0.5s;
+        }
+
+        .bmi-val {
+            font-size: 2.8rem;
+            font-weight: 900;
+        }
+
+        .bmi-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 2px;
+        }
+
+        .status-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        /* Suggestions List */
+        .info-grid {
+            display: grid;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .info-card {
+            padding: 20px;
+            border-radius: 20px;
+            background: #f8fafc;
+            border-left: 5px solid var(--heart-blue);
+        }
+
+        .info-card h4 {
+            font-size: 14px;
+            color: var(--heart-blue);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card ul {
+            list-style: none;
+        }
+
+        .info-card li {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card li::before {
+            content: "✦";
+            color: var(--heart-blue);
+            font-size: 10px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: white;
+        }
+
+        .pg-badge {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pg-name {
+            color: #60a5fa;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .pg-title {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .main-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lang-switch">
+    <button id="hi-btn" class="lang-btn active" onclick="setLanguage('hi')">हिन्दी</button>
+    <button id="en-btn" class="lang-btn" onclick="setLanguage('en')">EN</button>
+</div>
+
+<div class="header">
+    <div class="logo-container">
+        <!-- Dual Shade Heart -->
+        <svg class="heart-svg" viewBox="0 0 24 24">
+            <defs>
+                <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:var(--heart-red);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:var(--heart-blue);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path fill="url(#heartGradient)" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.41,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.59,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+        </svg>
+        <!-- ECG Pulse Line -->
+        <svg class="ecg-line" viewBox="0 0 100 40">
+            <path fill="none" stroke="white" stroke-width="2" d="M0,20 L20,20 L25,10 L30,30 L35,20 L80,20 L85,5 L90,35 L95,20 L100,20" />
+        </svg>
+    </div>
+    <h1 id="title-text">स्वास्थ्य संचेतना</h1>
+    <p class="sub-tag" id="sub-tag-text">Know Your Health • Personal Wellness Tracker</p>
+</div>
+
+<div class="main-card">
+    <div class="unit-nav">
+        <button id="kg-in-btn" class="unit-tab active" onclick="setUnits('kg-in')">Kgs / Inches</button>
+        <button id="kg-cm-btn" class="unit-tab" onclick="setUnits('kg-cm')">Kgs / Cm</button>
+    </div>
+
+    <div class="input-box">
+        <label id="height-label">ऊंचाई (इंच में)</label>
+        <input type="number" id="height" placeholder="अपनी ऊंचाई लिखें..." step="0.1">
+    </div>
+
+    <div class="input-box">
+        <label id="weight-label">वजन (किग्रा में)</label>
+        <input type="number" id="weight" placeholder="अपना वजन लिखें..." step="0.1">
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-calc" id="calc-btn" onclick="calculateBMI()">स्वास्थ्य चेक करें</button>
+        <button class="btn-reset" id="reset-btn" onclick="resetForm()">रीसेट</button>
+    </div>
+
+    <div id="result-area">
+        <div class="bmi-card">
+            <div class="bmi-circle" id="bmi-circle">
+                <div class="bmi-val" id="bmi-display">--</div>
+                <div class="bmi-label">BMI</div>
+            </div>
+            <div class="status-text" id="category-display">--</div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4 id="suggestions-header">🍱 खान-पान के सुझाव</h4>
+                    <ul id="food-list"></ul>
+                </div>
+                <div class="info-card" style="border-left-color: #10b981;">
+                    <h4 id="activity-header" style="color: #10b981;">🏃 प्राकृतिक व्यायाम</h4>
+                    <ul id="exercise-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <p style="margin-top: 25px; font-size: 11px; text-align: center; color: #64748b; line-height: 1.6;" id="disclaimer-text">
+            सूचना: यह कैलकुलेटर केवल शैक्षिक जानकारी के लिए है। किसी भी स्वास्थ्य योजना के लिए डॉक्टर से परामर्श लें।
+        </p>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="pg-badge">
+        <span class="pg-name">Prashant Gautam</span>
+        <span class="pg-title">Assistant Accounts Officer</span>
+        <span class="pg-title">O/o Accountant General (A & E) Uttarakhand</span>
+    </div>
+</div>
+
+<script>
+    let currentLang = 'hi';
+    let currentUnit = 'kg-in';
+
+    const data = {
+        hi: {
+            title: "स्वास्थ्य संचेतना",
+            subTag: "Know Your Health • Personal Wellness Tracker",
+            hIn: "ऊंचाई (इंच में)",
+            hCm: "ऊंचाई (सेमी में)",
+            wKg: "वजन (किग्रा में)",
+            calc: "स्वास्थ्य चेक करें",
+            reset: "रीसेट",
+            food: "🍱 खान-पान के सुझाव",
+            exer: "🏃 प्राकृतिक व्यायाम",
+            disc: "सूचना: यह कैलकुलेटर केवल शैक्षिक जानकारी के लिए है। किसी भी स्वास्थ्य योजना के लिए डॉक्टर से परामर्श लें।",
+            phH: "अपनी ऊंचाई लिखें...",
+            phW: "अपना वजन लिखें...",
+            err: "कृपया सही ऊंचाई और वजन लिखें!",
+            cats: {
+                u: "कम वजन (Underweight)",
+                n: "स्वस्थ वजन (Normal)",
+                o: "अधिक वजन (Overweight)",
+                ob: "मोटापा (Obese)"
+            },
+            f: {
+                u: ["भुने चने और दूध", "केला और दही", "मूंगफली का सेवन", "घर का बना घी"],
+                n: ["ताजी दालें और रोटी", "मौसमी हरी सब्जियां", "ताजी छाछ", "मौसमी फल"],
+                o: ["अंकुरित अनाज", "नींबू पानी", "उबली सब्जियां", "तला-भुना कम करें"],
+                ob: ["दाल का सूप", "बाजरा या जई", "ज्यादा पानी पिएं", "चीनी और मैदा बंद"]
+            },
+            e: {
+                u: ["हल्की सैर", "सीढ़ियां चढ़ना", "योग और ध्यान", "8 घंटे की नींद"],
+                n: ["तेज चलना (30 मि.)", "साइकिल चलाना", "प्राणायाम", "सक्रिय दिनचर्या"],
+                o: ["तेज सैर (40 मि.)", "सीढ़ियों का प्रयोग", "सक्रिय घरेलू काम", "भोजन बाद टहलें"],
+                ob: ["धीरे-धीरे पैदल चलें", "हाथ-पैर स्ट्रेच करें", "दीवार के सहारे स्क्वाट्स", "नियमित 10 मि. सैर"]
+            }
+        },
+        en: {
+            title: "Know Your Health",
+            subTag: "Know Your Health • Personal Wellness Tracker",
+            hIn: "Height (Inches)",
+            hCm: "Height (Cm)",
+            wKg: "Weight (Kg)",
+            calc: "Check Health",
+            reset: "Reset",
+            food: "🍱 Food Suggestions",
+            exer: "🏃 Natural Exercise",
+            disc: "Note: This is for educational purposes only. Consult a doctor for clinical advice.",
+            phH: "Enter height...",
+            phW: "Enter weight...",
+            err: "Please enter valid values!",
+            cats: {
+                u: "Underweight",
+                n: "Healthy Weight",
+                o: "Overweight",
+                ob: "Obese"
+            },
+            f: {
+                u: ["Roasted Gram & Milk", "Banana & Curd", "Peanuts & Seeds", "Homemade Ghee"],
+                n: ["Fresh Dals & Roti", "Seasonal Greens", "Fresh Buttermilk", "Seasonal Fruits"],
+                o: ["Sprouted Grains", "Lemon Water", "Boiled Veggies", "Less Oily Food"],
+                ob: ["Lentil Soup", "Millets or Oats", "Stay Hydrated", "Quit Sugar/Flour"]
+            },
+            e: {
+                u: ["Light Walk", "Stair Climbing", "Yoga & Meditation", "Proper Sleep"],
+                n: ["Brisk Walk (30 min)", "Cycling", "Deep Breathing", "Active Routine"],
+                o: ["Fast Walk (40 min)", "Use Stairs", "Active Chores", "Post-meal Walk"],
+                ob: ["Slow Steady Walking", "Arm/Leg Stretches", "Wall Squats", "Three 10-min Walks"]
+            }
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        document.getElementById('hi-btn').classList.toggle('active', lang === 'hi');
+        document.getElementById('en-btn').classList.toggle('active', lang === 'en');
+        updateUI();
+        if (document.getElementById('result-area').style.display === 'block') calculateBMI();
+    }
+
+    function updateUI() {
+        const t = data[currentLang];
+        document.getElementById('title-text').innerText = t.title;
+        document.getElementById('sub-tag-text').innerText = t.subTag;
+        document.getElementById('weight-label').innerText = t.wKg;
+        document.getElementById('calc-btn').innerText = t.calc;
+        document.getElementById('reset-btn').innerText = t.reset;
+        document.getElementById('suggestions-header').innerText = t.food;
+        document.getElementById('activity-header').innerText = t.exer;
+        document.getElementById('disclaimer-text').innerText = t.disc;
+        document.getElementById('height').placeholder = t.phH;
+        document.getElementById('weight').placeholder = t.phW;
+        document.getElementById('height-label').innerText = (currentUnit === 'kg-in') ? t.hIn : t.hCm;
+    }
+
+    function setUnits(unit) {
+        currentUnit = unit;
+        document.getElementById('kg-in-btn').classList.toggle('active', unit === 'kg-in');
+        document.getElementById('kg-cm-btn').classList.toggle('active', unit === 'kg-cm');
+        updateUI();
+        resetForm();
+    }
+
+    function calculateBMI() {
+        const h = parseFloat(document.getElementById('height').value);
+        const w = parseFloat(document.getElementById('weight').value);
+        const t = data[currentLang];
+
+        if (!h || !w || h <= 0 || w <= 0) {
+            if (document.getElementById('result-area').style.display === 'none') alert(t.err);
+            return;
+        }
+
+        let bmi;
+        if (currentUnit === 'kg-cm') {
+            bmi = w / ((h / 100) ** 2);
+        } else {
+            bmi = w / ((h * 0.0254) ** 2);
+        }
+
+        showResult(bmi);
+    }
+
+    function showResult(bmi) {
+        const area = document.getElementById('result-area');
+        const display = document.getElementById('bmi-display');
+        const catBox = document.getElementById('category-display');
+        const circle = document.getElementById('bmi-circle');
+        const t = data[currentLang];
+
+        display.innerText = bmi.toFixed(1);
+        area.style.display = 'block';
+
+        let cat = '';
+        let color = '';
+        if (bmi < 18.5) { cat = 'u'; color = '#3b82f6'; }
+        else if (bmi < 25) { cat = 'n'; color = '#10b981'; }
+        else if (bmi < 30) { cat = 'o'; color = '#f59e0b'; }
+        else { cat = 'ob'; color = '#ef4444'; }
+
+        catBox.innerText = t.cats[cat];
+        catBox.style.color = color;
+        circle.style.borderColor = color;
+        display.style.color = color;
+        circle.style.boxShadow = `0 10px 30px ${color}33`;
+
+        document.getElementById('food-list').innerHTML = t.f[cat].map(f => `<li>${f}</li>`).join('');
+        document.getElementById('exercise-list').innerHTML = t.e[cat].map(e => `<li>${e}</li>`).join('');
+        
+        area.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('height').value = '';
+        document.getElementById('weight').value = '';
+        document.getElementById('result-area').style.display = 'none';
+    }
+
+    updateUI();
+</script>
+
+</body>
+</html>

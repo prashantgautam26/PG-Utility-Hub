@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Connection - Compatibility Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a5acd; /* Spirit Medium Purple */
+            --secondary-color: #f0e68c; /* Khaki */
+            --background-color: #191970; /* Midnight Blue */
+            --card-background: rgba(255, 255, 255, 0.05);
+            --text-color: #e6e6fa; /* Lavender */
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Poppins', sans-serif;
+            --hindi-font: 'Tiro Devanagari Hindi', serif;
+        }
+        body {
+            background-color: var(--background-color);
+            background-image:
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+                radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+            background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+            background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+            font-family: var(--body-font);
+            color: var(--text-color);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-family: var(--heading-font);
+            color: var(--secondary-color);
+            font-size: 3rem;
+            text-shadow: 0 0 10px var(--secondary-color);
+        }
+        .form-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 2rem;
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .partner-input {
+            width: 45%;
+        }
+        .partner-input h3 {
+            font-family: var(--heading-font);
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0,0,0,0.2);
+            color: var(--text-color);
+            font-family: var(--body-font);
+        }
+        #generate-btn {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: var(--heading-font);
+            background-color: var(--secondary-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+        #report-container {
+            margin-top: 3rem;
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
+            display: none; /* Initially hidden */
+            font-family: var(--hindi-font);
+        }
+        #report-container h2 {
+            font-family: var(--heading-font);
+            color: var(--secondary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+        .report-section {
+            margin-bottom: 1.5rem;
+        }
+        .report-section h4 {
+            color: var(--primary-color);
+            font-family: var(--heading-font);
+        }
+        .signature {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .form-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .partner-input {
+                width: 90%;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .signature {
+                position: static;
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Cosmic Connection</h1>
+        <p>Enter your details to generate your unique compatibility report in Hindi.</p>
+
+        <div class="form-container">
+            <div class="partner-input">
+                <h3>Partner 1</h3>
+                <div class="form-group">
+                    <label for="name1">Name</label>
+                    <input type="text" id="name1" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label for="dob1">Date of Birth</label>
+                    <input type="date" id="dob1">
+                </div>
+            </div>
+            <div class="partner-input">
+                <h3>Partner 2</h3>
+                <div class="form-group">
+                    <label for="name2">Name</label>
+                    <input type="text" id="name2" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label for="dob2">Date of Birth</label>
+                    <input type="date" id="dob2">
+                </div>
+            </div>
+        </div>
+
+        <button id="generate-btn">Generate Report</button>
+
+        <div id="report-container"></div>
+    </div>
+
+    <div class="signature">
+        Created by Prashant Gautam
+    </div>
+
+    <script>
+        // --- HINDI DATA ---
+        const zodiacNames_hi = {
+            "Aries": "मेष", "Taurus": "वृषभ", "Gemini": "मिथुन", "Cancer": "कर्क", "Leo": "सिंह", "Virgo": "कन्या", 
+            "Libra": "तुला", "Scorpio": "वृश्चिक", "Sagittarius": "धनु", "Capricorn": "मकर", "Aquarius": "कुंभ", "Pisces": "मीन"
+        };
+        const numberNames_hi = {"1":"१", "2":"२", "3":"३", "4":"४", "5":"५", "6":"६", "7":"७", "8":"८", "9":"९"};
+
+        const zodiacCompatibility_hi = {
+            "Aries": "मेष एक अग्नि राशि है, जो जुनून और ऊर्जा लाती है। जब दो मेष एक साथ आते हैं, तो यह उत्साह का बवंडर होता है, लेकिन प्रतिस्पर्धी भावनाओं से सावधान रहें।",
+            "Taurus": "धैर्यवान वृषभ मेष की अग्नि को स्थिरता प्रदान करता है। यह एक चुनौतीपूर्ण मैच हो सकता है, लेकिन यदि आप एक-दूसरे की विभिन्न गतियों की सराहना करते हैं, तो यह बहुत फायदेमंद हो सकता है।",
+            "Gemini": "मिथुन की तेज बुद्धि और मेष का उत्साह एक गतिशील, मजेदार जोड़ी बनाता है। इस ऊर्जावान संबंध को बनाए रखने के लिए संचार महत्वपूर्ण है।",
+            "Cancer": "कर्क की भावनात्मक गहराई सीधे-सादे मेष पर भारी पड़ सकती है। इस पानी और आग के मिश्रण को काम करने के लिए दोनों तरफ से धैर्य और समझ की आवश्यकता होती है।",
+            "Leo": "दो अग्नि राशियाँ! यह एक भावुक, नाटकीय और रचनात्मक जोड़ी है। दोनों को सुर्खियों में रहना पसंद है, इसलिए इसे साझा करना सुनिश्चित करें।",
+            "Virgo": "व्यावहारिक कन्या को मेष का आवेग अराजक लग सकता है। हालांकि, कन्या का संगठनात्मक कौशल मेष के बड़े विचारों को वास्तविकता में बदलने में मदद कर सकता है।",
+            "Libra": "विपरीत गुणों का एक उत्कृष्ट मेल। मेष का दृढ़ संकल्प और तुला की कूटनीति एक संतुलित और सामंजस्यपूर्ण साझेदारी बनाती है।",
+            "Scorpio": "तीव्र और शक्तिशाली। यह एक चुंबकीय संबंध है, जो जुनून से भरा है। हालाँकि, यदि विश्वास पूरी तरह से स्थापित नहीं है तो सत्ता का संघर्ष उत्पन्न हो सकता है।",
+            "Sagittarius": "एक शानदार, साहसिक मैच। दोनों राशियों को स्वतंत्रता, यात्रा और नए अनुभव पसंद हैं। आपके पास एक साथ शायद ही कोई नीरस क्षण होगा।",
+            "Capricorn": "मकर की महत्वाकांक्षा लक्ष्य-उन्मुख होती है, जबकि मेष की अधिक आवेगी होती है। यदि आप सफलता के लिए अपने विभिन्न दृष्टिकोणों को संरेखित करते हैं तो आप महान चीजें हासिल कर सकते हैं।",
+            "Aquarius": "दोनों स्वतंत्र और दूरदर्शी हैं। यह एक मजबूत बौद्धिक और सामाजिक संबंध है, जो एक दूसरे की स्वतंत्रता के लिए आपसी सम्मान पर बना है।",
+            "Pisces": "मीन का स्वप्निल स्वभाव और मेष का सीधापन टकरा सकता है। हालाँकि, मीन की करुणा उग्र मेष आत्मा को शांत कर सकती है, जिससे एक गहरा सहानुभूतिपूर्ण बंधन बन सकता है।"
+        };
+
+        const numerologyCompatibility_hi = {
+            "1": "एक '1' के रूप में, आप एक नेता हैं। दूसरे '1' के साथ, आपकी एक शक्तिशाली लेकिन संभावित रूप से प्रतिस्पर्धी गतिशीलता होगी। आप दोनों सफलता के लिए प्रयास करते हैं।",
+            "2": "'2' एक शांतिदूत है। आपका कोमल स्वभाव सद्भाव और भावनात्मक समर्थन लाता है, जिससे एक गहरा पोषण करने वाली साझेदारी बनती है।",
+            "3": "एक '3' रचनात्मकता और संचार लाता है। यह एक सामाजिक और अभिव्यंजक संबंध है, जो हँसी और खुशी से भरा है।",
+            "4": "संख्या '4' स्थिरता और कड़ी मेहनत का प्रतिनिधित्व करती है। आप समर्पण के माध्यम से एक साथ एक बहुत ही सुरक्षित और स्थायी नींव बना सकते हैं।",
+            "5": "स्वतंत्रता और रोमांच '5' को परिभाषित करते हैं। यह संबंध गतिशील और हमेशा बदलने वाला है, जो नए अनुभवों और उत्साह पर पनपता है।",
+            "6": "संख्या '6' हृदय और घर की संख्या है। यह एक गहरा रोमांटिक और जिम्मेदार साझेदारी है, जो परिवार और समुदाय पर केंद्रित है।",
+            "7": "एक '7' एक आध्यात्मिक खोजी और विश्लेषक है। यह एक गहरा बौद्धिक और आध्यात्मिक संबंध है, जहाँ गहरे विचार साझा किए जाते हैं।",
+            "8": "संख्या '8' शक्ति और प्रचुरता के बारे में है। साथ में, आप महान भौतिक सफलता प्राप्त कर सकते हैं और एक साम्राज्य का निर्माण कर सकते हैं।",
+            "9": "एक '9' के रूप में, आप एक दयालु मानवतावादी हैं। यह एक निस्वार्थ और देने वाला संबंध है, जो दुनिया को एक बेहतर जगह बनाने पर केंद्रित है।"
+        };
+
+        const personalityKeywords_hi = ["एक रचनात्मक आत्मा", "एक तार्किक दिमाग", "एक साहसी दिल", "एक पोषण करने वाली आत्मा", "एक करिश्माई उपस्थिति", "एक लचीला चरित्र", "एक आशावादी दृष्टिकोण", "एक विचारशील स्वभाव", "एक दृढ़ इच्छाशक्ति", "एक चंचल ऊर्जा"];
+
+        // --- HELPER FUNCTIONS ---
+        function getZodiacSign(date) {
+            const day = date.getDate(); const month = date.getMonth() + 1;
+            if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquarius";
+            if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Pisces";
+            if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
+            if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
+            if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gemini";
+            if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
+            if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Leo";
+            if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Virgo";
+            if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Libra";
+            if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpio";
+            if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittarius";
+            return "Capricorn";
+        }
+
+        function getLifePathNumber(date) {
+            let num = `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
+            let sum = num.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+            while (sum > 9 && sum !== 11 && sum !== 22) { // Master numbers can be kept, but we simplify
+                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+            }
+            return sum > 9 ? sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0) : sum;
+        }
+
+        function getPersonalityKeyword(name) {
+            if (!name) return personalityKeywords_hi[0];
+            return personalityKeywords_hi[name.length % personalityKeywords_hi.length];
+        }
+
+        // --- MAIN LOGIC ---
+        const generateBtn = document.getElementById('generate-btn');
+        const reportContainer = document.getElementById('report-container');
+
+        generateBtn.addEventListener('click', () => {
+            const name1 = document.getElementById('name1').value;
+            const dob1String = document.getElementById('dob1').value;
+            const name2 = document.getElementById('name2').value;
+            const dob2String = document.getElementById('dob2').value;
+
+            if (!name1 || !dob1String || !name2 || !dob2String) {
+                alert('Please fill out all fields for both partners.');
+                return;
+            }
+
+            const dob1 = new Date(dob1String);
+            const dob2 = new Date(dob2String);
+
+            const zodiac1 = getZodiacSign(dob1);
+            const zodiac2 = getZodiacSign(dob2);
+            const lifePath1 = getLifePathNumber(dob1).toString();
+            const lifePath2 = getLifePathNumber(dob2).toString();
+            const personality1 = getPersonalityKeyword(name1);
+            const personality2 = getPersonalityKeyword(name2);
+
+            // Generate Report HTML in Hindi
+            const reportHTML = `
+                <h2>आपका ब्रह्मांडीय संबंध रिपोर्ट</h2>
+                <div class="report-section">
+                    <h4>राशि अनुकूलता: ${zodiacNames_hi[zodiac1]} और ${zodiacNames_hi[zodiac2]}</h4>
+                    <p>${zodiacCompatibility_hi[zodiac1] || "एक रहस्यमय और अद्वितीय राशि संबंध।"}</p>
+                    <p>${zodiacCompatibility_hi[zodiac2] || "इस गतिशीलता की खोज से कई आश्चर्य सामने आएंगे।"}</p>
+                </div>
+                <div class="report-section">
+                    <h4>अंकज्योतिष संबंध: जीवन पथ ${numberNames_hi[lifePath1]} और ${numberNames_hi[lifePath2]}</h4>
+                    <p>${numerologyCompatibility_hi[lifePath1] || "आपके जीवन पथ संख्या एक विशेष बंधन बनाते हैं।"}</p>
+                    <p>${numerologyCompatibility_hi[lifePath2] || "यह संयोजन खोज की यात्रा की ओर इशारा करता है।"}</p>
+                </div>
+                <div class="report-section">
+                    <h4>व्यक्तित्व अंतर्दृष्टि</h4>
+                    <p><strong>${name1}</strong> में ${personality1} है, जबकि <strong>${name2}</strong> में ${personality2} है। साथ में, यह एक ऐसी साझेदारी का सुझाव देता है जो रचनात्मकता को तर्क के साथ और रोमांच को स्थिरता के साथ संतुलित करती है। आपकी ऊर्जाएं आकर्षक तरीकों से एक-दूसरे की पूरक हैं।</p>
+                </div>
+            `;
+            
+            reportContainer.innerHTML = reportHTML;
+            reportContainer.style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>

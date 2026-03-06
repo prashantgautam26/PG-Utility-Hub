@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Salary & Tax Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        legend {
+            padding: 0 10px;
+            font-weight: 600;
+            color: #16a085;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 12px;
+            background-color: #16a085;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #117a65;
+        }
+        #results {
+            margin-top: 30px;
+            background-color: #e8f6f3;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #16a085;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d1e8e2;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item span {
+            font-weight: 500;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #117a65;
+        }
+        .tax-regime { text-align: center; margin-bottom: 20px; }
+        .tax-regime label { margin: 0 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-container" style="text-align: center; margin-bottom: 10px;">
+        <div class="logo-initials" style="width: 50px; height: 50px; background-color: #2c3e50; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">
+            <span style="color: #3498db;">P</span><span style="color: #2ecc71;">G</span>
+        </div>
+    </div>
+    <h1>Annual Salary & Tax Calculator</h1>
+
+    <form id="taxForm">
+        <fieldset>
+            <legend>Employee & Salary Details</legend>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="fy">Financial Year</label>
+                    <select id="fy">
+                        <option value="2023-24">2023-24</option>
+                        <option value="2024-25">2024-25</option>
+                        <option value="2025-26" selected>2025-26</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="incrementMonth">Annual Increment Month</label>
+                    <select id="incrementMonth">
+                        <option value="1">January</option>
+                        <option value="7" selected>July</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="payLevel">Pay Level (7th CPC)</label>
+                    <select id="payLevel" onchange="updateBasicPayOptions()" required>
+                        <option value="">--Select Level--</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="basicPayAtStart">Basic Pay (as on 1st April)</label>
+                    <select id="basicPayAtStart" required>
+                        <option value="">--Select Pay Level First--</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="daRateJuly">DA Rate from July (%)</label>
+                    <input type="number" id="daRateJuly" placeholder="e.g., 53" required>
+                </div>
+                <div class="form-group">
+                    <label for="daRateJan">DA Rate from Jan (%)</label>
+                    <input type="number" id="daRateJan" placeholder="e.g., 50" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Allowances</legend>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="fixedTPTA">Fixed Monthly TPTA</label>
+                    <input type="number" id="fixedTPTA" value="1800">
+                </div>
+                <div class="form-group" style="justify-content: center;">
+                    <label><input type="checkbox" id="isHraClaimed" onchange="toggleHraFields()"> Are you claiming HRA exemption?</label>
+                </div>
+            </div>
+            <div class="form-grid" id="hraFields" style="display: none; margin-top: 20px;">
+                <div class="form-group">
+                    <label for="cityCategory">City Category</label>
+                    <select id="cityCategory">
+                        <option value="Z">Z</option>
+                        <option value="Y">Y</option>
+                        <option value="X">X</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rentPaid">Total Rent Paid (Annual)</label>
+                    <input type="number" id="rentPaid" value="0">
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset id="deductionsFieldset">
+            <legend>Deductions (Old Regime)</legend>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="deduction80C">80C Investments (other than NPS)</label>
+                    <input type="number" id="deduction80C" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="deduction80CCD1B">80CCD(1B) (NPS)</label>
+                    <input type="number" id="deduction80CCD1B" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="deduction80D">80D (Health Insurance)</label>
+                    <input type="number" id="deduction80D" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="professionalTax">Professional Tax (Annual)</label>
+                    <input type="number" id="professionalTax" value="2400">
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="tax-regime">
+            <h2>Choose Tax Regime</h2>
+            <label><input type="radio" name="taxRegime" value="new" checked onchange="toggleDeductions()"> New Regime</label>
+            <label><input type="radio" name="taxRegime" value="old" onchange="toggleDeductions()"> Old Regime</label>
+        </div>
+
+        <button type="button" onclick="calculateTax()">Calculate Tax</button>
+    </form>
+
+    <div id="results" style="display:none;"></div>
+
+</div>
+
+<p style="text-align:center; font-weight: bold; color: #16a085; margin-top: 30px;">Created by:- Prashant Gautam, Assistant Accounts Officer, O/o Accountant General (A & E) Uttrakhand</p>
+
+<script>
+    const payMatrix = {
+        1: [18000, 18500, 19100, 19700, 20300, 20900, 21500, 22100, 22800, 23500, 24200, 24900, 25600, 26400, 27200, 28000, 28800, 29700, 30600, 31500, 32400, 33400, 34400, 35400, 36500, 37600, 38700, 39900, 41100, 42300, 43600, 44900, 46200, 47600, 49000, 50500, 52000, 53600, 55200, 56900],
+        2: [19900, 20500, 21100, 21700, 22400, 23100, 23800, 24500, 25200, 26000, 26800, 27600, 28400, 29300, 30200, 31100, 32000, 33000, 34000, 35000, 36100, 37200, 38300, 39400, 40600, 41800, 43100, 44400, 45700, 47100, 48500, 50000, 51500, 53000, 54600, 56200, 57900, 59600, 61400, 63200],
+        3: [21700, 22400, 23100, 23800, 24500, 25200, 26000, 26800, 27600, 28400, 29300, 30200, 31100, 32000, 33000, 34000, 35000, 36100, 37200, 38300, 39400, 40600, 41800, 43100, 44400, 45700, 47100, 48500, 50000, 51500, 53000, 54600, 56200, 57900, 59600, 61400, 63200, 65100, 67100, 69100],
+        4: [25500, 26300, 27100, 27900, 28700, 29600, 30500, 31400, 32300, 33300, 34300, 35300, 36400, 37500, 38600, 39800, 41000, 42200, 43500, 44800, 46100, 47500, 48900, 50400, 51900, 53500, 55100, 56800, 58500, 60300, 62100, 64000, 65900, 67900, 69900, 72000, 74200, 76400, 78700, 81100],
+        5: [29200, 30100, 31000, 31900, 32900, 33900, 34900, 35900, 37000, 38100, 39200, 40400, 41600, 42800, 44100, 45400, 46800, 48200, 49600, 51100, 52600, 54200, 55800, 57500, 59200, 61000, 62800, 64700, 66600, 68600, 70700, 72800, 75000, 77300, 79600, 82000, 84500, 87000, 89600, 92300],
+        6: [35400, 36500, 37600, 38700, 39900, 41100, 42300, 43600, 44900, 46200, 47600, 49000, 50500, 52000, 53600, 55200, 56900, 58600, 60400, 62200, 64100, 66000, 68000, 70000, 72100, 74300, 76500, 78800, 81200, 83600, 86100, 88700, 91400, 94100, 96900, 99800, 102800, 105900, 109100, 112400],
+        7: [44900, 46200, 47600, 49000, 50500, 52000, 53600, 55200, 56900, 58600, 60400, 62200, 64100, 66000, 68000, 70000, 72100, 74300, 76500, 78800, 81200, 83600, 86100, 88700, 91400, 94100, 96900, 99800, 102800, 105900, 109100, 112400, 115800, 119300, 122900, 126600, 130400, 134300, 138300, 142400],
+        8: [47600, 49000, 50500, 52000, 53600, 55200, 56900, 58600, 60400, 62200, 64100, 66000, 68000, 70000, 72100, 74300, 76500, 78800, 81200, 83600, 86100, 88700, 91400, 94100, 96900, 99800, 102800, 105900, 109100, 112400, 115800, 119300, 122900, 126600, 130400, 134300, 138300, 142400, 146700, 151100],
+        9: [53100, 54700, 56300, 58000, 59700, 61500, 63300, 65200, 67200, 69200, 71300, 73400, 75600, 77900, 80200, 82600, 85100, 87700, 90300, 93000, 95800, 98700, 101700, 104800, 107900, 111100, 114400, 117800, 121300, 124900, 128600, 132500, 136500, 140600, 144800, 149100, 153600, 158200, 162900, 167800],
+        10: [56100, 57800, 59500, 61300, 63100, 65000, 67000, 69000, 71100, 73200, 75400, 77700, 80000, 82400, 84900, 87400, 90000, 92700, 95500, 98400, 101400, 104400, 107500, 110700, 114000, 117400, 120900, 124500, 128200, 132000, 135900, 139900, 144100, 148400, 152900, 157500, 162200, 167100, 172100, 177200],
+        11: [67700, 69700, 71800, 74000, 76200, 78500, 80900, 83300, 85800, 88400, 91100, 93800, 96600, 99500, 102500, 105600, 108800, 112100, 115500, 119000, 122600, 126300, 130100, 134000, 138000, 142100, 146400, 150800, 155300, 159900, 164700, 169600, 174700, 179900, 185300, 190900, 196600, 202500, 208600, 214800],
+        12: [78800, 81200, 83600, 86100, 88700, 91400, 94100, 96900, 99800, 102800, 105900, 109100, 112400, 115800, 119300, 122900, 126600, 130400, 134300, 138300, 142400, 146700, 151100, 155600, 160300, 165100, 170100, 175200, 180500, 185900, 191500, 197200, 203100, 209200],
+        13: [118500, 122100, 125800, 129600, 133500, 137500, 141600, 145800, 150200, 154700, 159300, 164100, 169000, 174100, 179300, 184700, 190200, 195900, 201800, 207900],
+        '13A': [131100, 135000, 139100, 143300, 147600, 152000, 156600, 161300, 166100, 171100, 176200, 181500, 186900, 192500, 198300, 204200, 210300],
+        14: [144200, 148500, 153000, 157600, 162300, 167200, 172200, 177400, 182700, 188200, 193800, 199600, 205600, 211800, 218200],
+        15: [182200, 187700, 193300, 199100, 205100, 211300, 217600, 224100],
+        16: [205400, 211600, 217900, 224400],
+        17: [225000],
+        18: [250000]
+    };
+
+    function toggleDeductions() {
+        const regime = document.querySelector('input[name="taxRegime"]:checked').value;
+        document.getElementById('deductionsFieldset').style.display = (regime === 'old') ? 'block' : 'none';
+    }
+
+    function toggleHraFields() {
+        const isHraClaimed = document.getElementById('isHraClaimed').checked;
+        document.getElementById('hraFields').style.display = isHraClaimed ? 'grid' : 'none';
+    }
+
+    function populatePayLevels() {
+        const payLevelSelect = document.getElementById('payLevel');
+        const levels = Object.keys(payMatrix);
+        for (const level of levels) {
+            const option = document.createElement('option');
+            option.value = level;
+            option.textContent = `Level ${level}`;
+            payLevelSelect.appendChild(option);
+        }
+    }
+
+    function updateBasicPayOptions() {
+        const payLevel = document.getElementById('payLevel').value;
+        const basicPaySelect = document.getElementById('basicPayAtStart');
+        basicPaySelect.innerHTML = ''; 
+
+        if (!payLevel) {
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "--Select Pay Level First--";
+            basicPaySelect.appendChild(defaultOption);
+            return;
+        }
+
+        const basicPays = payMatrix[payLevel];
+        for (const pay of basicPays) {
+            const option = document.createElement('option');
+            option.value = pay;
+            option.textContent = new Intl.NumberFormat('en-IN').format(pay);
+            basicPaySelect.appendChild(option);
+        }
+    }
+
+    window.onload = function() {
+        toggleDeductions();
+        toggleHraFields();
+        populatePayLevels();
+        updateBasicPayOptions();
+    };
+
+    function calculateTax() {
+        // --- 1. GATHER ALL INPUTS ---
+        const taxRegime = document.querySelector('input[name="taxRegime"]:checked').value;
+        const startBasic = parseFloat(document.getElementById('basicPayAtStart').value);
+        const payLevel = document.getElementById('payLevel').value;
+        const incrementMonth = parseInt(document.getElementById('incrementMonth').value);
+        const daRateJan = parseFloat(document.getElementById('daRateJan').value);
+        const daRateJuly = parseFloat(document.getElementById('daRateJuly').value);
+        const fixedTPTA = parseFloat(document.getElementById('fixedTPTA').value);
+        const isHraClaimed = document.getElementById('isHraClaimed').checked;
+        const cityCategory = document.getElementById('cityCategory').value;
+        const rentPaid = parseFloat(document.getElementById('rentPaid').value);
+        const profTax = parseFloat(document.getElementById('professionalTax').value);
+        let ded80C = parseFloat(document.getElementById('deduction80C').value);
+        let ded80CCD1B = parseFloat(document.getElementById('deduction80CCD1B').value);
+        let ded80D = parseFloat(document.getElementById('deduction80D').value);
+
+        if (!payLevel || !startBasic) {
+            alert("Please select a Pay Level and Basic Pay.");
+            return;
+        }
+
+        // --- 2. SALARY & ALLOWANCE SIMULATION (12 MONTHS) ---
+        let totalBasic = 0, totalDA = 0, totalHRA = 0, totalTPTA = 0;
+        let totalEmployeeNPS = 0;
+
+        const levelPays = payMatrix[payLevel];
+        const startIndex = levelPays.indexOf(startBasic);
+        const incrementedBasic = (startIndex !== -1 && startIndex < levelPays.length -1) ? levelPays[startIndex + 1] : startBasic;
+        
+        for (let i = 0; i < 12; i++) {
+            const monthJS = (3 + i) % 12; 
+
+            let currentBasic = startBasic;
+            const incrementMonthJS = incrementMonth - 1; 
+            
+            if ( (incrementMonthJS === 6 && monthJS >= 6) || (incrementMonthJS === 0 && monthJS < 3 && incrementMonth < 4) ) {
+                 currentBasic = incrementedBasic;
+            } else if (incrementMonthJS === 0 && incrementMonth > 3) {
+                //This case is for July increment getting basic for apr-jun
+            } else if (incrementMonthJS === 6 && monthJS < 6) {
+                //This case is for Jan increment getting basic for apr-dec
+            } else {
+                 currentBasic = incrementedBasic;
+            }
+            
+
+            const currentDARate = (monthJS >= 6) ? daRateJuly : daRateJan;
+            const currentDA = currentBasic * (currentDARate / 100);
+            
+            let hraRate = 0;
+            if (isHraClaimed) {
+                if (currentDARate >= 50) {
+                    if(cityCategory === 'X') hraRate = 0.30;
+                    else if (cityCategory === 'Y') hraRate = 0.20;
+                    else hraRate = 0.10;
+                } else {
+                    if(cityCategory === 'X') hraRate = 0.27;
+                    else if (cityCategory === 'Y') hraRate = 0.18;
+                    else hraRate = 0.09;
+                }
+            }
+            const currentHRA = currentBasic * hraRate;
+            
+            const currentTPTA = fixedTPTA + (fixedTPTA * currentDARate / 100);
+
+            totalBasic += currentBasic;
+            totalDA += currentDA;
+            totalHRA += currentHRA;
+            totalTPTA += currentTPTA;
+            totalEmployeeNPS += (currentBasic + currentDA) * 0.10;
+        }
+
+        // --- 3. GROSS SALARY & EXEMPTIONS ---
+        const grossSalary = totalBasic + totalDA + totalHRA + totalTPTA;
+        
+        let hraExemption = 0;
+        if (isHraClaimed && rentPaid > 0) {
+            const salaryForHRA = totalBasic + totalDA;
+            const metroFactor = (cityCategory === 'X') ? 0.5 : 0.4;
+            const minHRA = Math.min(
+                totalHRA,
+                rentPaid - (0.10 * salaryForHRA),
+                metroFactor * salaryForHRA
+            );
+            hraExemption = Math.max(0, minHRA);
+        }
+
+        const taxableGross = grossSalary - hraExemption;
+        const standardDeduction = 50000;
+        let netTaxableIncome = taxableGross - standardDeduction;
+
+        // --- 4. REGIME-SPECIFIC DEDUCTIONS & TAX CALCULATION ---
+        let totalDeductionsVal = 0;
+        
+        if (taxRegime === 'old') {
+            const actual80C = Math.min(ded80C + totalEmployeeNPS, 150000);
+            const actual80CCD1B = Math.min(ded80CCD1B, 50000);
+            const actual80D = Math.min(ded80D, 25000); 
+            const actualProfTax = Math.min(profTax, 2500);
+            totalDeductionsVal = actual80C + actual80CCD1B + actual80D + actualProfTax;
+            netTaxableIncome -= totalDeductionsVal;
+        }
+        
+        let tax = 0;
+        netTaxableIncome = Math.max(0, netTaxableIncome);
+
+        if (taxRegime === 'new') {
+            if (netTaxableIncome <= 700000) { tax = 0; } 
+            else {
+                if (netTaxableIncome > 300000) tax += (Math.min(netTaxableIncome, 600000) - 300000) * 0.05;
+                if (netTaxableIncome > 600000) tax += (Math.min(netTaxableIncome, 900000) - 600000) * 0.10;
+                if (netTaxableIncome > 900000) tax += (Math.min(netTaxableIncome, 1200000) - 900000) * 0.15;
+                if (netTaxableIncome > 1200000) tax += (Math.min(netTaxableIncome, 1500000) - 1200000) * 0.20;
+                if (netTaxableIncome > 1500000) tax += (netTaxableIncome - 1500000) * 0.30;
+            }
+        } else { // Old Regime
+            if (netTaxableIncome <= 500000) { tax = 0; } 
+            else {
+                let tempIncome = netTaxableIncome;
+                if (tempIncome > 1000000) { tax += (tempIncome - 1000000) * 0.30; tempIncome = 1000000; }
+                if (tempIncome > 500000) { tax += (tempIncome - 500000) * 0.20; tempIncome = 500000; }
+                if (tempIncome > 250000) { tax += (tempIncome - 250000) * 0.05; }
+            }
+        }
+        
+        const cess = tax * 0.04;
+        const totalTaxPayable = tax + cess;
+
+        // --- 5. RENDER OUTPUT ---
+        const resultsDiv = document.getElementById('results');
+        const formatInr = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        resultsDiv.innerHTML = `
+            <h2>Tax Calculation Summary (${taxRegime.toUpperCase()} Regime)</h2>
+            <div class="result-item"><span>Total Basic Pay:</span> <span class="value">${formatInr(totalBasic)}</span></div>
+            <div class="result-item"><span>Total Dearness Allowance (DA):</span> <span class="value">${formatInr(totalDA)}</span></div>
+            <div class="result-item"><span>Total House Rent Allowance (HRA):</span> <span class="value">${formatInr(totalHRA)}</span></div>
+            <div class="result-item"><span>Total Transport Allowance (TPTA):</span> <span class="value">${formatInr(totalTPTA)}</span></div>
+            <hr>
+            <div class="result-item"><strong><span>Gross Salary:</span></strong> <strong class="value">${formatInr(grossSalary)}</strong></div>
+            <hr>
+            <div class="result-item"><span>HRA Exemption:</span> <span class="value">- ${formatInr(hraExemption)}</span></div>
+            <div class="result-item"><span>Standard Deduction:</span> <span class="value">- ${formatInr(standardDeduction)}</span></div>
+            <div class="result-item"><span>Professional Tax:</span> <span class="value">- ${formatInr(taxRegime === 'old' ? Math.min(profTax, 2500) : 0)}</span></div>
+            <div class="result-item"><span>Section 80 Deductions (incl. NPS):</span> <span class="value">- ${formatInr(taxRegime === 'old' ? totalDeductionsVal - Math.min(profTax, 2500) : 0)}</span></div>
+            <hr>
+            <div class="result-item"><strong><span>Net Taxable Income:</span></strong> <strong class="value">${formatInr(netTaxableIncome)}</strong></div>
+            <hr>
+            <div class="result-item"><span>Income Tax (Excl. Cess):</span> <span class="value">${formatInr(tax)}</span></div>
+            <div class="result-item"><span>Health & Edu. Cess (4%):</span> <span class="value">${formatInr(cess)}</span></div>
+            <hr>
+            <div class="result-item" style="font-size: 1.2em;"><strong><span>Total Tax Payable:</span></strong> <strong class="value">${formatInr(totalTaxPayable)}</strong></div>
+        `;
+        resultsDiv.style.display = 'block';
+    }
+</script>
+</body>
+</html>
+</body>
+</html>

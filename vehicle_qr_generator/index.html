@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Owner QR Generator</title>
+    <!-- QRCode.js library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #10b981;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .logo-initials {
+            width: 60px;
+            height: 60px;
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        #result-container {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #ffffff;
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        #qr-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        #qr-instruction {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            margin-top: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+        }
+
+        #download-btn:hover {
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .footer strong {
+            color: #1e293b;
+        }
+
+        .note {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 1.5rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-initials">
+        <span style="color: #3498db;">P</span><span style="color: #2ecc71;">G</span>
+    </div>
+
+    <h1>Vehicle QR Generator</h1>
+    
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Enter Owner's Name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="vehicle_no">Vehicle No.</label>
+        <input type="text" id="vehicle_no" placeholder="Enter Vehicle Number (e.g. DL 10 AB 1234)" required>
+    </div>
+
+    <div class="form-group">
+        <label for="mob_no">Mob. No.</label>
+        <input type="tel" id="mob_no" placeholder="Enter 10-digit Mobile Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+    </div>
+
+    <div class="form-group">
+        <label for="emergency_no">Emergency No.</label>
+        <input type="tel" id="emergency_no" placeholder="Enter 10-digit Emergency Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+    </div>
+
+    <button onclick="generateQR()">Generate QR Code</button>
+
+    <div id="result-container" class="hidden">
+        <div id="qr-title">Vehicle Owner's Details</div>
+        <div id="qrcode"></div>
+        <div id="qr-instruction">Scan from Google Lens or Camera</div>
+        <button id="download-btn" onclick="downloadQR()">Download QR Image</button>
+    </div>
+
+    <p class="note">Generate a QR code containing owner details for your vehicle dashboard or window.</p>
+
+    <div class="footer">
+        Created by <strong>Prashant Gautam</strong>
+    </div>
+</div>
+
+<script>
+    let qrcodeInstance = null;
+
+    function formatVehicleNo(val) {
+        let cleaned = val.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+        let match = cleaned.match(/^([A-Z]{2})(\d{2})([A-Z]{1,2})(\d{4})$/);
+        if (match) {
+            return `${match[1]}-${match[2]}-${match[3]}-${match[4]}`;
+        }
+        return val.toUpperCase().replace(/\s+/g, '-'); 
+    }
+
+    function generateQR() {
+        const name = document.getElementById('name').value.trim();
+        let vehicle = document.getElementById('vehicle_no').value.trim();
+        const mobile = document.getElementById('mob_no').value.trim();
+        const emergency = document.getElementById('emergency_no').value.trim();
+        
+        const resultContainer = document.getElementById('result-container');
+        const qrDiv = document.getElementById('qrcode');
+
+        if (!name || !vehicle || !mobile || !emergency) {
+            alert('Please fill in all the fields.');
+            return;
+        }
+
+        if (mobile.length !== 10 || emergency.length !== 10) {
+            alert('Mobile numbers must be exactly 10 digits.');
+            return;
+        }
+
+        vehicle = formatVehicleNo(vehicle);
+        document.getElementById('vehicle_no').value = vehicle;
+
+        // Simplified text format for better scanning compatibility
+        // Some scanners like Google Lens prefer clear, simple key-value pairs
+        const qrText = `OWNER DETAILS
+Name: ${name}
+Vehicle: ${vehicle}
+Mob: ${mobile}
+Emergency: ${emergency}`;
+
+        qrDiv.innerHTML = '';
+        resultContainer.classList.remove('hidden');
+
+        qrcodeInstance = new QRCode(qrDiv, {
+            text: qrText,
+            width: 256,
+            height: 256,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M // Medium level for better readability
+        });
+
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function downloadQR() {
+        const qrContainer = document.getElementById('qrcode');
+        const img = qrContainer.querySelector('img');
+        const canvas = qrContainer.querySelector('canvas');
+        
+        let dataURL;
+        if (img && img.src) {
+            dataURL = img.src;
+        } else if (canvas) {
+            dataURL = canvas.toDataURL("image/png");
+        }
+
+        if (dataURL) {
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = `Vehicle-QR-${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+</script>
+
+</body>
+</html>
