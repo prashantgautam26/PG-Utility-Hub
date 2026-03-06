@@ -36,14 +36,12 @@
         header {
             text-align: center;
             margin-bottom: 50px;
-            animation: fadeIn 1s ease-out;
         }
 
         h1 {
             font-size: 2.5rem;
             color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .subtitle {
@@ -63,24 +61,30 @@
         .tool-card {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 30px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: var(--shadow);
+            position: relative;
         }
 
-        .tool-card:hover {
+        .tool-card:not(.inactive):hover {
             transform: translateY(-10px);
             background: var(--white);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             border-color: var(--primary);
+        }
+
+        .tool-card.inactive {
+            opacity: 0.6;
+            filter: grayscale(1);
+            cursor: not-allowed;
         }
 
         .icon {
@@ -113,8 +117,20 @@
             transition: background 0.3s;
         }
 
-        .tool-card:hover .launch-btn {
+        .tool-card:not(.inactive):hover .launch-btn {
             background: var(--secondary);
+        }
+
+        .coming-soon-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #6c757d;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
 
         footer {
@@ -124,67 +140,38 @@
             font-size: 0.9rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 600px) {
+            .tools-grid { grid-template-columns: 1fr; }
         }
+    </style>
+</head>
+<body>
 
-        /* Responsive adjustments */
-        /* Coming Soon Style */
-        .tool-card.inactive {
-            pointer-events: none;
-            opacity: 0.7;
-            filter: grayscale(0.8);
-            position: relative;
-            cursor: not-allowed;
-        }
-
-        .coming-soon-tag {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #6c757d;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        </style>
-        </head>
-        <body>
-
-        <header>
+    <header>
         <h1>PG's Utility Tools</h1>
         <p class="subtitle">प्रशांत गौतम द्वारा विकसित उपयोगी कैलकुलेटर और टूल्स</p>
-        </header>
+    </header>
 
-        <div class="tools-grid">
+    <div class="tools-grid">
         <!-- Pension Calculator -->
         <a href="Others/pension_calculator.html" class="tool-card">
             <div>
                 <span class="icon">💰</span>
                 <h3>Pension Calculator</h3>
-                <p>Central Government Pension calculation tool for employees. गणना करें अपनी पेंशन और अन्य लाभ।</p>
+                <p>Central Government Pension calculation tool for employees.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
 
-        <!-- Annual Tax Calculator (INACTIVE) -->
+        <!-- Inactive Tax Calculator -->
         <div class="tool-card inactive">
-            <span class="coming-soon-tag">Coming Soon</span>
+            <span class="coming-soon-badge">COMING SOON</span>
             <div>
                 <span class="icon">📊</span>
                 <h3>Tax Calculator</h3>
-                <p>Calculate your annual salary and income tax obligations accurately. वार्षिक आय और कर की गणना। (कार्य प्रगति पर)</p>
+                <p>Annual salary and income tax obligations. (Under Development)</p>
             </div>
-            <span class="launch-btn" style="background: #ccc;">Coming Soon</span>
+            <span class="launch-btn" style="background: #999;">Inactive</span>
         </div>
 
         <!-- Health & BMI -->
@@ -192,7 +179,7 @@
             <div>
                 <span class="icon">🏥</span>
                 <h3>Know Your Health</h3>
-                <p>Track your BMI and health metrics with this intuitive dashboard. स्वास्थ्य और बीएमआई ट्रैकर।</p>
+                <p>Track your BMI and health metrics with this intuitive dashboard.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -202,7 +189,7 @@
             <div>
                 <span class="icon">📱</span>
                 <h3>UPI QR Generator</h3>
-                <p>Create custom UPI QR codes for seamless payments. यूपीआई क्यूआर कोड जनरेटर।</p>
+                <p>Create custom UPI QR codes for seamless payments.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -212,7 +199,7 @@
             <div>
                 <span class="icon">📈</span>
                 <h3>DA Arrear Calculator</h3>
-                <p>Quickly calculate your Dearness Allowance arrears. डीए एरियर की आसान गणना।</p>
+                <p>Quickly calculate your Dearness Allowance arrears.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -222,7 +209,7 @@
             <div>
                 <span class="icon">⌨️</span>
                 <h3>Typing Test</h3>
-                <p>Improve your typing speed and accuracy with real-time feedback. टाइपिंग स्पीड टेस्ट।</p>
+                <p>Improve your typing speed and accuracy with real-time feedback.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -232,7 +219,7 @@
             <div>
                 <span class="icon">🚗</span>
                 <h3>Vehicle QR Generator</h3>
-                <p>Generate QR codes for vehicle identification and information. वाहन क्यूआर कोड जनरेटर।</p>
+                <p>Generate QR codes for vehicle identification.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -242,7 +229,7 @@
             <div>
                 <span class="icon">✨</span>
                 <h3>MathMagic</h3>
-                <p>Interactive mathematical tools and visualizations. गणित का जादू और टूल्स।</p>
+                <p>Interactive mathematical tools and visualizations.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
@@ -252,7 +239,7 @@
             <div>
                 <span class="icon">🔍</span>
                 <h3>Pension Verification</h3>
-                <p>Verify pension calculations and data consistency. पेंशन सत्यापन कैलकुलेटर।</p>
+                <p>Verify pension calculations and data consistency.</p>
             </div>
             <span class="launch-btn">Launch Tool</span>
         </a>
