@@ -1,41 +1,3 @@
-
-<style>
-    .home-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #4361ee;
-        color: white !important;
-        padding: 10px 18px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 15px;
-        font-weight: bold;
-        z-index: 9999;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        border: 2px solid white;
-    }
-    .home-btn:hover {
-        background: #3f37c9;
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    }
-    /* Mobile adjustment */
-    @media (max-width: 600px) {
-        .home-btn {
-            top: 10px;
-            left: 10px;
-            padding: 8px 12px;
-            font-size: 13px;
-        }
-    }
-</style>
-<a href="../index.html" class="home-btn">🏠 Home</a>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +7,254 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
-    
+    <style>
+        :root {
+            /* Elegant Palette */
+            --primary-color: #4A90E2; /* A softer, elegant blue */
+            --secondary-color: #F5A623; /* A warm, friendly orange */
+            --background-color: #F8F9FA; /* A very light grey */
+            --text-color: #4A4A4A; /* A dark grey, not quite black */
+            --font-family: 'Poppins', sans-serif;
+            
+            /* Box Colors - A more cohesive, pastel-like theme */
+            --add-bg: #E9F3FD;
+            --add-border: #4A90E2;
+            --sub-bg: #FDEDED;
+            --sub-border: #D0021B;
+            --mul-bg: #F0EAFB;
+            --mul-border: #9013FE;
+            --div-bg: #EAFBF2;
+            --div-border: #0B875B;
+        }
+        body {
+            background-color: var(--background-color);
+            /* Watermark Background */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Ctext x='10' y='20' font-family='Arial' font-size='12' fill='rgba(74,144,226,0.05)'%3E%2B%3C/text%3E%3Ctext x='50' y='30' font-family='Arial' font-size='12' fill='rgba(74,144,226,0.05)'%3E%E2%88%9A%3C/text%3E%3Ctext x='80' y='50' font-family='Arial' font-size='12' fill='rgba(74,144,226,0.05)'%3E%C3%97%3C/text%3E%3Ctext x='20' y='70' font-family='Arial' font-size='12' fill='rgba(74,144,226,0.05)'%3E%E2%88%92%3C/text%3E%3Ctext x='60' y='90' font-family='Arial' font-size='12' fill='rgba(74,144,226,0.05)'%3E%C3%B7%3C/text%3E%3C/svg%3E");
+            font-family: var(--font-family);
+            color: var(--text-color);
+            padding: 1rem;
+            min-height: 100vh;
+        }
+        .main-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* --- Central Calculator --- */
+        .center-container {
+            text-align: center;
+            width: 100%;
+            max-width: 500px; /* Slightly smaller to give more room */
+            z-index: 10;
+        }
+        .title {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .calculator {
+            padding: 2rem;
+            background-color: white;
+            border-radius: 20px; /* More rounded */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Softer shadow */
+        }
+        #centerNumberInput {
+            text-align: center;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            width: 95%;
+        }
+        .center-buttons {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .center-btn {
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .center-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .center-btn-warning {
+            background-color: var(--secondary-color);
+        }
+        #centerResultContainer {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            min-height: 100px;
+        }
+
+        /* --- Corner Task Boxes --- */
+        .task-box {
+            position: absolute;
+            width: 280px; /* Adjusted width */
+            padding: 1.25rem;
+            border-radius: 15px; /* Softer radius */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            z-index: 20;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+        .task-box:hover {
+            transform: scale(1.03);
+        }
+        .task-box h4 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .task-box input {
+            width: 100%;
+            padding: 0.4rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .task-box button {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .task-box .result-area {
+            margin-top: 1rem;
+            font-weight: 600;
+            text-align: center;
+            min-height: 45px; /* Increased height */
+            word-wrap: break-word;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        /* Positioning - Using vh/vw for better scaling */
+        .top-left { top: 5vh; left: 5vw; }
+        .top-right { top: 5vh; right: 5vw; }
+        .middle-left { bottom: 5vh; left: 5vw; } /* Changed to bottom */
+        .middle-right { bottom: 5vh; right: 5vw; } /* Changed to bottom */
+
+        /* Coloring */
+        .addition { background-color: var(--add-bg); border-top: 5px solid var(--add-border); }
+        .addition button { background-color: var(--add-border); }
+        .subtraction { background-color: var(--sub-bg); border-top: 5px solid var(--sub-border); }
+        .subtraction button { background-color: var(--sub-border); }
+        .multiplication { background-color: var(--mul-bg); border-top: 5px solid var(--mul-border); }
+        .multiplication button { background-color: var(--mul-border); }
+        .division { background-color: var(--div-bg); border-top: 5px solid var(--div-border); }
+        .division button { background-color: var(--div-border); }
+        
+        /* Signature */
+        .signature {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.9rem; /* Adjusted size */
+            color: #888; /* Softer color */
+            z-index: 100;
+        }
+        .signature strong {
+            color: #555;
+        }
+        
+        /* ===== RESPONSIVE STYLES for Mobile ===== */
+        @media (max-width: 1200px) {
+            body {
+                padding: 1rem;
+            }
+            .main-wrapper {
+                display: block; /* Change to block flow */
+                min-height: auto;
+            }
+            .task-box {
+                position: static; /* Remove absolute positioning */
+                transform: none;
+                width: 100%;
+                margin: 0 auto 2rem auto; /* Center and add bottom margin */
+                left: auto;
+                right: auto;
+                top: auto;
+                bottom: auto;
+            }
+            .center-container {
+                max-width: none;
+                margin-top: 2rem;
+            }
+            .title {
+                font-size: 2.5rem;
+            }
+            .signature {
+                position: static; /* Let it flow at the end */
+                margin-top: 2rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+
+    <!-- Home Button Styling -->
+    <style>
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #4361ee;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            z-index: 999999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid white;
+        }
+        .home-btn:hover {
+            background: #3f37c9;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        @media (max-width: 600px) {
+            .home-btn { top: 10px; left: 10px; padding: 8px 12px; font-size: 13px; }
+        }
+        @media print { .home-btn { display: none; } }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="home-btn">🏠 Home</a>
+
 
     <div class="main-wrapper">
 
@@ -222,4 +431,3 @@
 
 </body>
 </html>
-
