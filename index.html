@@ -270,8 +270,15 @@
     <script>
         // Function to fetch and update visitor count
         async function updateVisitorCount() {
-            const counterId = "pg-utility-hub-v1"; // Unique ID for your counter
-            const url = `https://api.counterapi.dev/v1/prashantgautam/${counterId}/up`;
+            const counterId = "pg-utility-hub-unique-v2"; // New ID for clean start
+            const namespace = "prashantgautam";
+            
+            // Check if user has already been counted in this session
+            const hasBeenCounted = sessionStorage.getItem('v_counted');
+            
+            // If not counted, use '/up' to increment. If already counted, use '/get' to just show.
+            const action = hasBeenCounted ? 'get' : 'up';
+            const url = `https://api.counterapi.dev/v1/${namespace}/${counterId}/${action}`;
             
             try {
                 const response = await fetch(url);
@@ -281,10 +288,16 @@
                 // Pad with zeros to make it 9 digits
                 const paddedCount = count.padStart(9, '0');
                 
-                // Animate the text change
+                // Update display
                 document.getElementById('v-count').innerText = paddedCount;
+                
+                // Set flag so we don't count them again this session
+                if (!hasBeenCounted) {
+                    sessionStorage.setItem('v_counted', 'true');
+                }
             } catch (error) {
                 console.error("Counter failed:", error);
+                // Fallback display
                 document.getElementById('v-count').innerText = "000000001";
             }
         }
