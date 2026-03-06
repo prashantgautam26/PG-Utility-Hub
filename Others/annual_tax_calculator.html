@@ -1,104 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Annual Salary & Tax Calculator</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        fieldset {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        legend {
-            padding: 0 10px;
-            font-weight: 600;
-            color: #16a085;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        input, select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        button {
-            grid-column: 1 / -1;
-            padding: 12px;
-            background-color: #16a085;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #117a65;
-        }
-        #results {
-            margin-top: 30px;
-            background-color: #e8f6f3;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 5px solid #16a085;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #d1e8e2;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        .result-item span {
-            font-weight: 500;
-        }
-        .result-item .value {
-            font-weight: 700;
-            color: #117a65;
-        }
-        .tax-regime { text-align: center; margin-bottom: 20px; }
-        .tax-regime label { margin: 0 15px; cursor: pointer; }
-    </style>
-</head>
-<body>
+
 <style>
     .home-btn {
         position: fixed;
@@ -106,24 +6,43 @@
         left: 20px;
         background: #4361ee;
         color: white !important;
-        padding: 10px 15px;
-        border-radius: 8px;
+        padding: 10px 18px;
+        border-radius: 30px;
         text-decoration: none;
-        font-family: sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
         font-weight: bold;
-        z-index: 1000;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         transition: all 0.3s ease;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 8px;
+        border: 2px solid white;
     }
     .home-btn:hover {
         background: #3f37c9;
         transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    /* Mobile adjustment */
+    @media (max-width: 600px) {
+        .home-btn {
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
     }
 </style>
-<a href="../index.html" class="home-btn">?? Home</a>
+<a href="../index.html" class="home-btn">🏠 Home</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Salary & Tax Calculator</title>
+    
 
 <div class="container">
     <div class="logo-container" style="text-align: center; margin-bottom: 10px;">

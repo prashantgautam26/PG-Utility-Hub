@@ -245,11 +245,53 @@
         </a>
     </div>
 
-    <div class="visitor-counter" style="margin-top: 40px; text-align: center; padding: 20px; background: rgba(255,255,255,0.4); border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);">
-        <p style="font-size: 0.8rem; color: #555; margin-bottom: 8px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Page Visitors | कुल आगंतुक</p>
-        <!-- HITS Visitor Counter (Requires a live GitHub Repo) -->
-        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fprashantgautam%2Futility-tools&count_bg=%234361EE&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Total+Visits&edge_flat=false" alt="Visitors">
+    <div class="visitor-section" style="margin-top: 50px; text-align: center; padding-bottom: 40px;">
+        <p style="font-size: 0.85rem; color: #555; margin-bottom: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Total Visits | कुल आगंतुक</p>
+        
+        <!-- Digital Ticker Display -->
+        <div class="digital-ticker" style="
+            background: #0a0a0a;
+            color: #00d4ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 32px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.2);
+            letter-spacing: 6px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        ">
+            <span id="v-count">000000000</span>
+        </div>
     </div>
+
+    <script>
+        // Function to fetch and update visitor count
+        async function updateVisitorCount() {
+            const counterId = "pg-utility-hub-v1"; // Unique ID for your counter
+            const url = `https://api.counterapi.dev/v1/prashantgautam/${counterId}/up`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const count = data.count.toString();
+                
+                // Pad with zeros to make it 9 digits
+                const paddedCount = count.padStart(9, '0');
+                
+                // Animate the text change
+                document.getElementById('v-count').innerText = paddedCount;
+            } catch (error) {
+                console.error("Counter failed:", error);
+                document.getElementById('v-count').innerText = "000000001";
+            }
+        }
+
+        // Call on load
+        updateVisitorCount();
+    </script>
 
     <footer>
         <p>© 2026 प्रशांत गौतम द्वारा विकसित | सर्वाधिकार सुरक्षित</p>

@@ -1,3 +1,41 @@
+
+<style>
+    .home-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: #4361ee;
+        color: white !important;
+        padding: 10px 18px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+        font-weight: bold;
+        z-index: 9999;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 2px solid white;
+    }
+    .home-btn:hover {
+        background: #3f37c9;
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    /* Mobile adjustment */
+    @media (max-width: 600px) {
+        .home-btn {
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+    }
+</style>
+<a href="../index.html" class="home-btn">🏠 Home</a>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,173 +44,7 @@
     <title>QR Code Generator</title>
     <!-- QRCode.js library via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .logo-initials {
-            width: 60px;
-            height: 60px;
-            background-color: #2c3e50;
-            color: #fff;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 1.25rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.85rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.5rem;
-            box-sizing: border-box;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        button {
-            width: 100%;
-            padding: 0.85rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            transition: all 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        #qrcode {
-            margin: 2rem auto;
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        #qrcode canvas, #qrcode img {
-            max-width: 100%;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #download-btn {
-            background-color: #10b981;
-            margin-top: 1rem;
-        }
-
-        .footer {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #f1f5f9;
-            font-size: 0.95rem;
-            color: #64748b;
-        }
-
-        .footer strong {
-            color: #1e293b;
-        }
-
-        .note {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-top: 1.5rem;
-            line-height: 1.4;
-        }
-    </style>
-</head>
-<body>
-<style>
-    .home-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #4361ee;
-        color: white !important;
-        padding: 10px 15px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-family: sans-serif;
-        font-weight: bold;
-        z-index: 1000;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    .home-btn:hover {
-        background: #3f37c9;
-        transform: scale(1.05);
-    }
-</style>
-<a href="../index.html" class="home-btn">?? Home</a>
+    
 
 <div class="container">
     <div class="logo-initials">
